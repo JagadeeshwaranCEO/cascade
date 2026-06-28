@@ -1,0 +1,31 @@
+# Cascade Configuration
+cascade:
+  escalation_trigger_prob: 0.70   # P(escalation) to launch remote parallel
+  quality_threshold:        0.75   # Minimum quality for a response to win the race
+  signal_window:            10     # Tokens between signal reads
+  upgrade_q4_score:         0.42   # Fused score to upgrade LOCAL_FAST → LOCAL_VERIFY
+  upgrade_q8_score:         0.55   # Fused score to upgrade LOCAL_VERIFY → LOCAL_RECOVER
+  early_exit_score:         0.18   # Below this → stop early (confident)
+  min_tokens_early_exit:    20
+
+signals:
+  weights:
+    entropy:    0.35
+    confidence: 0.25
+    repetition: 0.15
+    speed:      0.10
+    classifier: 0.15
+
+local:
+  baseline_tps:
+    q2_k:   60.0   # AMD MI300X — calibrate on kickoff day
+    q4_k_m: 35.0
+    q8_0:   18.0
+
+quality_budget:
+  default: 100
+  spend:
+    LOCAL_FAST:    20
+    LOCAL_VERIFY:  50
+    LOCAL_RECOVER: 80
+    REMOTE_ESCAPE: 200

@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  cascade:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cascade:latest
+    container_name: cascade-runtime
+    ports:
+      - "8000:8000"
+    environment:
+      - FIREWORKS_API_KEY=${FIREWORKS_API_KEY}
+      - FIREWORKS_MODEL=${FIREWORKS_MODEL:-accounts/fireworks/models/llama-v3p1-70b-instruct}
+      - LOCAL_MODEL_DIR=/app/models
+    volumes:
+      - ./models:/app/models   # Mount pre-downloaded model files
+      - cascade-data:/app/data  # Persist learner state
+    devices:
+      - /dev/kfd               # AMD GPU kernel fusion driver
+      - /dev/dri               # Direct rendering infrastructure
+    group_add:
+      - video                  # AMD GPU render group
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  cascade-data:
