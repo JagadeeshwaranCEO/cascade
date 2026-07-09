@@ -8,7 +8,7 @@ Q2_K / Q4_K_M / Q8_0 tradeoffs are AMD-profiled on kickoff day
 and calibrated here.
 """
 from __future__ import annotations
-from ..core.inference_process import InferenceState
+from cascade.core.inference_process import InferenceState
 
 QUANT_MAP: dict[InferenceState, str] = {
     InferenceState.LOCAL_FAST:    "q2_k",   # 2-bit: ~6× speedup, ~68% RAM reduction
